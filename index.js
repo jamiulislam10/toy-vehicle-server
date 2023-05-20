@@ -29,32 +29,34 @@ async function run() {
 
         const serviceCollection = client.db('toyVichel').collection('products');
         const buyCollection = client.db('toyVichel').collection('buy')
-        app.get('/services', async (req, res) => {
-            const cursor = serviceCollection.find();
-            const result = await cursor.toArray();
-            res.send(result);
-        })
+        // app.get('/services', async (req, res) => {
+        //     const cursor = serviceCollection.find();
+        //     const result = await cursor.toArray();
+        //     res.send(result);
+        // })
         app.get('/addtoy', async (req, res) => {
             const cursor = serviceCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         })
 
-        // app.get('/services/:id', async(req,res)=>{
-        //     const id =req.params.id;
-        //     const query = {_id: new ObjectId(id)}
-        //     const options = {
-        //         // Include only the `title` and `imdb` fields in each returned document
-        //         projection: { title: 1, price: 1, service_id: 1, img: 1 },
-        //     };
-        //     const result = await serviceCollection.findOne(query,options);
-        //     res.send(result);
-        // })
-        // buying
-        // app.post('/booking')
+        app.get('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: new ObjectId(id) }
+            const options = {
+                // Include only the `title` and `imdb` fields in each returned document
+                projection: { email: 1, customerName: 1, img: 1, price: 1, url: 1, categori: 1, quantity: 1, details: 1, Rating: 1 },
+            };
+            const result = await buyCollection.findOne(query, options);
+            console.log(result);
+            res.send(result);
+        })
+
+
 
         app.get('/bookings', async (req, res) => {
-            console.log(req.query.email);
+            // console.log(req.query.email);
             let query = {};
             if (req.query?.email) {
                 query = { email: req.query.email }
@@ -71,12 +73,31 @@ async function run() {
         })
 
 
-        app.delete('/bookings/:id', async(req,res)=>{
+        app.delete('/mybookings/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await buyCollection.deleteOne(query);
             res.send(result)
         })
+
+      
+
+        app.get("/mybookings/:email", async (req, res) => {
+            console.log(req.params.email);
+            const jobs = await buyCollection
+                .find({
+                    email: req.params.email,
+                })
+                .toArray();
+            res.send(jobs);
+        });
+
+
+        app.put('/mybookings/:id', async(req, res) =>{
+            const updatedBooking = req.body;
+        })
+
+
 
 
         // Send a ping to confirm a successful connection
