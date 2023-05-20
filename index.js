@@ -28,12 +28,13 @@ async function run() {
         await client.connect();
 
         const serviceCollection = client.db('toyVichel').collection('products');
-        const buyCollection = client.db('toyVichel').collection('buy')
-        // app.get('/services', async (req, res) => {
-        //     const cursor = serviceCollection.find();
-        //     const result = await cursor.toArray();
-        //     res.send(result);
-        // })
+        const buyCollection = client.db('toyVichel').collection('buy');
+        const categoryCollection = client.db('toyVichel').collection('category');
+        app.get('/category', async (req, res) => {
+            const cursor = categoryCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
         app.get('/addtoy', async (req, res) => {
             const cursor = serviceCollection.find();
             const result = await cursor.toArray();
@@ -93,9 +94,7 @@ async function run() {
         });
 
 
-        app.put('/mybookings/:id', async(req, res) =>{
-            const updatedBooking = req.body;
-        })
+    
 
 
 
