@@ -110,8 +110,7 @@ async function run() {
             const options = { upsert: true }
             const updatedUser = {
                 $set: {
-                    name: user.name,
-                    email: user.email
+                   ...user
                 }
             }
             const result = await buyCollection.updateOne(filter, updatedUser, options);
