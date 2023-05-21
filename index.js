@@ -81,7 +81,7 @@ async function run() {
             res.send(result)
         })
 
-      
+
 
         app.get("/mybookings/:email", async (req, res) => {
             console.log(req.params.email);
@@ -94,8 +94,29 @@ async function run() {
         });
 
 
-    
+        app.get('/mybookingss/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const user = await buyCollection.findOne(query);
+            console.log({ id, user });
+            res.send(user);
+        })
 
+        app.put('/mybookingss/:id', async (req, res) => {
+            const id = req.params.id;
+            const user = req.body;
+            console.log(id, user);
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true }
+            const updatedUser = {
+                $set: {
+                    name: user.name,
+                    email: user.email
+                }
+            }
+            const result = await buyCollection.updateOne(filter, updatedUser, options);
+            res.send(result);
+        })
 
 
 
